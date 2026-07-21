@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ShaSentra Labs — AI Infrastructure & MLOps Platform</title>
-<meta name="description" content="ShaSentra Labs builds on-demand AI infrastructure for India. Deploy ML models, orchestrate GPU workloads, and scale training and inference from a single control plane.">
+<meta name="description" content="ShaSentra Labs builds AI infrastructure for India — LLM serving, generative AI, RAG pipelines and agentic AI. Deploy models, orchestrate GPU workloads and run multi-agent systems from one control plane.">
 <link rel="canonical" href="https://shasentralabs.com/">
 <meta property="og:title" content="ShaSentra Labs — AI Infrastructure & MLOps Platform">
 <meta property="og:description" content="Deploy ML models, orchestrate GPU workloads, and scale training and inference from a single control plane. Built in India.">
@@ -33,7 +33,7 @@
   "logo": "https://shasentralabs.com/favicon.svg",
   "image": "https://shasentralabs.com/og-image.png",
   "email": "shathish@shasentralabs.com",
-  "description": "AI infrastructure and MLOps platform. Deploy machine learning models, orchestrate GPU workloads, and scale training and inference from a single control plane.",
+  "description": "AI infrastructure and MLOps platform for LLMs, generative AI, RAG and agentic AI. Deploy models, orchestrate GPU workloads, and run multi-agent systems from a single control plane.",
   "foundingDate": "2026",
   "address": {
     "@type": "PostalAddress",
@@ -41,7 +41,7 @@
     "addressRegion": "Tamil Nadu",
     "addressCountry": "IN"
   },
-  "knowsAbout": ["AI infrastructure","MLOps","GPU orchestration","Machine learning deployment","AI agents"]
+  "knowsAbout": ["AI infrastructure","MLOps","GPU orchestration","Large language models","Generative AI","Retrieval augmented generation","Agentic AI","AI agents","Quantum simulation"]
 }
 </script>
 <link rel="stylesheet" href="/site.css">
@@ -60,6 +60,8 @@
     <a class="brand" href="/"><span class="mark">S</span> ShaSentra Labs</a>
     <nav class="nav-links">
       <a href="#platform">Platform</a>
+      <a href="#genai">Generative AI</a>
+      <a href="#sgai">SGAI</a>
       <a href="#agents">Agents</a>
       <a href="#who">Who it's for</a>
       <a href="#stack">Technology</a>
@@ -74,6 +76,8 @@
   </div>
   <nav id="mobile-nav">
     <a href="#platform">Platform</a>
+    <a href="#genai">Generative AI</a>
+    <a href="#sgai">SGAI — super agent</a>
     <a href="#agents">AI Agents</a>
     <a href="#who">Who it's for</a>
     <a href="#migrate">Migration</a>
@@ -184,6 +188,58 @@
           <p>A stable endpoint your product calls, with latency, utilisation and per-second cost visible the whole way back down the stack.</p></div>
         </li>
       </ol>
+    </div>
+  </section>
+
+  <section id="genai">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="kicker">Generative AI</span>
+        <h2>The full generative stack, running on your terms</h2>
+        <p class="sub">
+          Serve open models, ground them in your own data, and fine-tune them — without
+          stitching together five vendors to do it.
+        </p>
+      </div>
+      <div class="grid">
+        <div class="card rv"><div class="ico">◧</div><h3>LLM serving</h3>
+          <p>Deploy open-weight language models behind an OpenAI-compatible endpoint. Batching, streaming and KV-cache handling are managed for you.</p></div>
+        <div class="card rv"><div class="ico">⌘</div><h3>RAG pipelines</h3>
+          <p>Chunking, embedding, vector storage and retrieval as a managed pipeline — so answers are grounded in your documents, not the model's guesswork.</p></div>
+        <div class="card rv"><div class="ico">≋</div><h3>Embeddings at scale</h3>
+          <p>Batch-generate embeddings across large corpora on GPU, then keep them fresh as your data changes.</p></div>
+        <div class="card rv"><div class="ico">◑</div><h3>Fine-tuning</h3>
+          <p>LoRA and full fine-tuning as queued jobs with checkpointing, then serve the adapted weights from the same control plane.</p></div>
+        <div class="card rv"><div class="ico">▦</div><h3>Multimodal</h3>
+          <p>Vision, speech and document models alongside text — same deployment surface, same metering, same autoscaling.</p></div>
+        <div class="card rv"><div class="ico">⊞</div><h3>Prompt &amp; model routing</h3>
+          <p>Route requests across models by cost, latency or quality, and switch without rewriting your application.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sgai" style="padding-top:0">
+    <div class="wrap">
+      <div class="contact-box rv" style="text-align:left; padding:52px 44px">
+        <span class="kicker">SGAI</span>
+        <h2 style="margin-bottom:14px">The super agent</h2>
+        <p class="sub" style="margin:0 0 30px; max-width:70ch">
+          SGAI is our orchestrating agent — a controller that plans a task, delegates
+          to specialised sub-agents, runs them in parallel across GPU capacity, and
+          reconciles their output into a single result. One interface over many agents,
+          many tools and many models.
+        </p>
+        <div class="grid" style="gap:18px">
+          <div class="card rv" style="padding:24px"><h3>Plans and decomposes</h3>
+            <p>Breaks a goal into steps, decides which specialist agent owns each, and sequences the dependencies between them.</p></div>
+          <div class="card rv" style="padding:24px"><h3>Delegates in parallel</h3>
+            <p>Fans work out to sub-agents running concurrently on separate accelerators, then merges results as they land.</p></div>
+          <div class="card rv" style="padding:24px"><h3>Self-corrects</h3>
+            <p>Evaluates intermediate output, retries failed steps and reroutes to a different model or tool when a path stalls.</p></div>
+          <div class="card rv" style="padding:24px"><h3>Stays accountable</h3>
+            <p>Every plan, delegation, tool call and token is traced — so you can see what it decided and what it cost.</p></div>
+        </div>
+      </div>
     </div>
   </section>
 
