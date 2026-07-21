@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShaSentra Labs — AI Infrastructure & MLOps Platform</title>
+<meta name="description" content="ShaSentra Labs builds on-demand AI infrastructure for India. Deploy ML models, orchestrate GPU workloads, and scale training and inference from a single platform.">
+<link rel="canonical" href="https://shasentralabs.com/">
+<meta property="og:title" content="ShaSentra Labs — AI Infrastructure & MLOps Platform">
+<meta property="og:description" content="Deploy ML models, orchestrate GPU workloads, and scale training and inference from a single platform. Built in India.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://shasentralabs.com/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  :root{
+    --bg:#0a0d14; --bg-alt:#0f1420; --card:#141a28; --line:#1f2838;
+    --fg:#e8edf5; --muted:#8b97ad; --accent:#4f8cff; --accent-soft:#1b2942;
+    --max:1080px;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#ffffff; --bg-alt:#f6f8fc; --card:#ffffff; --line:#e3e8f0;
+      --fg:#0d1420; --muted:#5a6678; --accent:#2563eb; --accent-soft:#eaf1ff;
+    }
+  }
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font:16px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 24px}
+
+  /* nav */
+  header{position:sticky; top:0; z-index:10; background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+  .nav{display:flex; align-items:center; justify-content:space-between; height:64px}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:650; letter-spacing:-.01em; color:var(--fg)}
+  .brand:hover{text-decoration:none}
+  .mark{width:26px; height:26px; border-radius:7px; background:linear-gradient(135deg,var(--accent),#8b5cf6);
+    display:grid; place-items:center; color:#fff; font-size:14px; font-weight:800}
+  .nav-links{display:flex; gap:26px; font-size:14.5px}
+  .nav-links a{color:var(--muted)}
+  .nav-links a:hover{color:var(--fg); text-decoration:none}
+  @media(max-width:640px){ .nav-links{display:none} }
+
+  /* hero */
+  .hero{padding:88px 0 72px}
+  .eyebrow{display:inline-block; font-size:12.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent); background:var(--accent-soft); padding:6px 12px; border-radius:100px; margin-bottom:22px}
+  h1{font-size:clamp(2.1rem,5.2vw,3.4rem); line-height:1.1; letter-spacing:-.03em; margin:0 0 20px; font-weight:700}
+  .lede{font-size:clamp(1.05rem,2.2vw,1.24rem); color:var(--muted); max-width:64ch; margin:0 0 34px}
+  .cta{display:flex; gap:12px; flex-wrap:wrap}
+  .btn{display:inline-block; padding:12px 22px; border-radius:9px; font-weight:600; font-size:15px; border:1px solid transparent}
+  .btn-primary{background:var(--accent); color:#fff}
+  .btn-primary:hover{filter:brightness(1.08); text-decoration:none}
+  .btn-ghost{border-color:var(--line); color:var(--fg)}
+  .btn-ghost:hover{border-color:var(--accent); text-decoration:none}
+
+  /* sections */
+  section{padding:72px 0; border-top:1px solid var(--line)}
+  h2{font-size:clamp(1.5rem,3vw,2rem); letter-spacing:-.02em; margin:0 0 14px; font-weight:670}
+  .sub{color:var(--muted); max-width:62ch; margin:0 0 40px}
+
+  .grid{display:grid; gap:20px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:13px; padding:26px}
+  .card h3{margin:0 0 9px; font-size:1.06rem; font-weight:640; letter-spacing:-.01em}
+  .card p{margin:0; color:var(--muted); font-size:14.8px}
+  .ico{width:34px;height:34px;border-radius:9px;background:var(--accent-soft);color:var(--accent);
+    display:grid;place-items:center;margin-bottom:15px;font-size:17px}
+
+  .stack{display:flex; flex-wrap:wrap; gap:9px; margin-top:8px}
+  .chip{font-size:13px; color:var(--muted); border:1px solid var(--line);
+    padding:6px 13px; border-radius:100px; background:var(--bg-alt)}
+
+  .split{display:grid; gap:40px; grid-template-columns:1.15fr .85fr; align-items:start}
+  @media(max-width:760px){ .split{grid-template-columns:1fr} }
+
+  .about-card{background:var(--bg-alt); border:1px solid var(--line); border-radius:13px; padding:26px}
+  .about-card dl{margin:0; display:grid; gap:14px}
+  .about-card dt{font-size:12.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:2px}
+  .about-card dd{margin:0; font-size:15px; font-weight:520}
+
+  footer{border-top:1px solid var(--line); padding:36px 0; color:var(--muted); font-size:14px}
+  .foot{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; align-items:center}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="/"><span class="mark">S</span> ShaSentra Labs</a>
+    <nav class="nav-links">
+      <a href="#platform">Platform</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#company">Company</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <span class="eyebrow">AI Infrastructure · Built in India</span>
+    <h1>Ship AI workloads without managing the infrastructure.</h1>
+    <p class="lede">
+      ShaSentra Labs is an AI infrastructure and MLOps platform. Deploy machine learning
+      models, orchestrate GPU workloads, and scale training and inference — from a single
+      control plane, with usage-based economics.
+    </p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#contact">Get in touch</a>
+      <a class="btn btn-ghost" href="#platform">See the platform</a>
+    </div>
+  </div>
+
+  <section id="platform">
+    <div class="wrap">
+      <h2>The platform</h2>
+      <p class="sub">
+        We build the orchestration layer that sits between your models and the accelerators
+        they run on — scheduling, autoscaling, observability, and metering, so teams can
+        focus on the workload rather than the cluster.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <div class="ico">◈</div>
+          <h3>Model deployment</h3>
+          <p>Move models from notebook to a running endpoint. Reproducible environments, versioned deployments, no bespoke cluster work.</p>
+        </div>
+        <div class="card">
+          <div class="ico">⇅</div>
+          <h3>GPU orchestration</h3>
+          <p>Schedule and place workloads across accelerators, with autoscaling rules and scale-to-zero so idle capacity does not burn budget.</p>
+        </div>
+        <div class="card">
+          <div class="ico">◎</div>
+          <h3>Observability</h3>
+          <p>Per-GPU utilisation, deployment health, and Prometheus-compatible metrics — so you can see what is running and what it costs.</p>
+        </div>
+        <div class="card">
+          <div class="ico">⌥</div>
+          <h3>Interactive compute</h3>
+          <p>Managed notebook environments for research and experimentation, provisioned on demand and torn down when idle.</p>
+        </div>
+        <div class="card">
+          <div class="ico">⚙</div>
+          <h3>Pipelines</h3>
+          <p>Compose training and inference stages into repeatable pipelines with queued, asynchronous provisioning.</p>
+        </div>
+        <div class="card">
+          <div class="ico">₹</div>
+          <h3>Transparent metering</h3>
+          <p>Usage measured at the accelerator-second, so spend maps to real consumption rather than reserved capacity.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="capabilities">
+    <div class="wrap">
+      <h2>Built on a modern stack</h2>
+      <p class="sub">Engineered for horizontal scale, asynchronous provisioning, and operational visibility from day one.</p>
+      <div class="stack">
+        <span class="chip">Go</span>
+        <span class="chip">Next.js · TypeScript</span>
+        <span class="chip">PostgreSQL</span>
+        <span class="chip">Redis Streams</span>
+        <span class="chip">Kubernetes</span>
+        <span class="chip">NVIDIA CUDA</span>
+        <span class="chip">DCGM metrics</span>
+        <span class="chip">Prometheus</span>
+        <span class="chip">Docker</span>
+        <span class="chip">JupyterLab</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="company">
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <h2>Company</h2>
+          <p class="sub" style="margin-bottom:18px">
+            ShaSentra Labs is building India's AI infrastructure layer — making accelerated
+            compute practical for teams that want to train and serve models without
+            operating the underlying platform themselves.
+          </p>
+          <p class="sub">
+            We are an early-stage company based in Tamil Nadu, working on the software that
+            makes GPU infrastructure usable: scheduling, scaling, measurement, and the
+            developer experience around them.
+          </p>
+        </div>
+        <div class="about-card">
+          <dl>
+            <div>
+              <dt>Founded</dt>
+              <dd>2026</dd>
+            </div>
+            <div>
+              <dt>Headquarters</dt>
+              <dd>Tiruvannamalai, Tamil Nadu, India</dd>
+            </div>
+            <div>
+              <dt>Focus</dt>
+              <dd>AI infrastructure · MLOps · GPU orchestration</dd>
+            </div>
+            <div>
+              <dt>Stage</dt>
+              <dd>Early stage — platform in active development</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <h2>Get in touch</h2>
+      <p class="sub">
+        For partnerships, early access, or general enquiries, we would be glad to hear from you.
+      </p>
+      <p style="font-size:1.15rem; font-weight:600; margin:0 0 8px">
+        <a href="mailto:shathish@shasentralabs.com">shathish@shasentralabs.com</a>
+      </p>
+      <p style="color:var(--muted); margin:0">Tiruvannamalai, Tamil Nadu, India</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 ShaSentra Labs. All rights reserved.</span>
+    <span><a href="mailto:shathish@shasentralabs.com">shathish@shasentralabs.com</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
