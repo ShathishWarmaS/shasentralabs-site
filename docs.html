@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture — ShaSentra Labs</title>
+<meta name="description" content="How the ShaSentra Labs platform is built: control plane, asynchronous provisioning, scheduling, autoscaling, observability and metering for GPU workloads.">
+<link rel="canonical" href="https://shasentralabs.com/docs.html">
+<meta property="og:title" content="Architecture — ShaSentra Labs">
+<meta property="og:description" content="How the ShaSentra Labs platform is built: control plane, asynchronous provisioning, scheduling, autoscaling, observability and metering.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://shasentralabs.com/docs.html">
+<meta property="og:image" content="https://shasentralabs.com/og-image.png">
+<meta property="og:site_name" content="ShaSentra Labs">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shasentralabs.com/og-image.png">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#05070f" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/site.css">
+<style>
+  .doc{max-width:780px; margin:0 auto; padding:0 24px}
+  .doc h2{margin:56px 0 14px; font-size:clamp(1.4rem,2.8vw,1.85rem)}
+  .doc h3{margin:34px 0 10px; font-size:1.08rem; font-weight:640; letter-spacing:-.012em}
+  .doc p{color:var(--muted); margin:0 0 16px}
+  .doc ul{color:var(--muted); margin:0 0 16px; padding-left:22px}
+  .doc li{margin-bottom:8px}
+  .doc code{font:13.2px ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:var(--chip); border:1px solid var(--line); padding:2px 7px; border-radius:6px; color:var(--fg)}
+  .doc pre{background:var(--code-bg); color:var(--code-fg); border:1px solid var(--line-strong);
+    border-radius:12px; padding:18px 20px; overflow-x:auto; margin:0 0 20px;
+    font:13.2px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace}
+  .doc pre code{background:none;border:0;padding:0;color:inherit}
+  .lead{font-size:1.1rem; color:var(--muted)}
+  .toc{border:1px solid var(--line); border-radius:13px; padding:22px 26px; background:var(--glass); margin:8px 0 12px}
+  .toc ol{margin:0; padding-left:20px; color:var(--muted)}
+  .toc a{color:var(--muted)} .toc a:hover{color:var(--fg)}
+  .note-box{border:1px solid var(--line); border-left:3px solid var(--blue); border-radius:10px;
+    padding:16px 20px; background:var(--chip); margin:0 0 20px; color:var(--muted); font-size:15px}
+  table{width:100%; border-collapse:collapse; margin:0 0 20px; font-size:14.6px}
+  th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); color:var(--muted)}
+  th{color:var(--fg); font-weight:620; font-size:13px; letter-spacing:.03em; text-transform:uppercase}
+  .tbl-wrap{overflow-x:auto}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="aurora" aria-hidden="true"><span class="orb a"></span><span class="orb b"></span></div>
+<div class="grid-bg" aria-hidden="true"></div>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="/"><span class="mark">S</span> ShaSentra Labs</a>
+    <nav class="nav-links">
+      <a href="/#platform">Platform</a>
+      <a href="/#agents">Agents</a>
+      <a href="/docs.html" class="active">Architecture</a>
+      <a href="/#company">Company</a>
+    </nav>
+    <div class="nav-right">
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">◐</button>
+      <a class="nav-cta" href="/#contact">Contact</a>
+      <button class="icon-btn" id="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">☰</button>
+    </div>
+  </div>
+  <nav id="mobile-nav">
+    <a href="/#platform">Platform</a>
+    <a href="/#agents">AI Agents</a>
+    <a href="/docs.html">Architecture</a>
+    <a href="/#company">Company</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+</header>
+
+<main id="main">
+  <div class="wrap hero" style="padding:76px 0 12px">
+    <span class="kicker">Architecture</span>
+    <h1 style="font-size:clamp(2rem,4.6vw,3rem)">How the platform works</h1>
+    <p class="lede">
+      An engineering overview of how ShaSentra provisions, schedules, scales and meters
+      GPU workloads — and the design decisions behind it.
+    </p>
+  </div>
+
+  <section style="padding:24px 0 90px">
+    <div class="doc">
+
+      <div class="toc">
+        <ol>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#control-plane">Control plane</a></li>
+          <li><a href="#provisioning">Asynchronous provisioning</a></li>
+          <li><a href="#scaling">Scaling and scale-to-zero</a></li>
+          <li><a href="#observability">Observability</a></li>
+          <li><a href="#metering">Metering</a></li>
+          <li><a href="#decisions">Design decisions</a></li>
+        </ol>
+      </div>
+
+      <h2 id="overview">Overview</h2>
+      <p class="lead">
+        ShaSentra is an orchestration layer. It does not try to be a new runtime or a new
+        model format — it sits between workloads and accelerators, and takes responsibility
+        for the parts teams usually end up hand-rolling: provisioning, placement, autoscaling,
+        health, and cost attribution.
+      </p>
+      <p>
+        The system splits into a stateless control plane, a durable job queue, and workers that
+        reconcile desired state against a cluster. Everything a user does — deploy a model, open
+        a notebook, run a pipeline — becomes a record in Postgres and a job on a queue.
+      </p>
+
+      <h2 id="control-plane">Control plane</h2>
+      <p>
+        The API is a stateless Go service. Statelessness is the point: it lets the control plane
+        scale horizontally behind an autoscaler, and means no request depends on which instance
+        happens to serve it.
+      </p>
+      <ul>
+        <li><strong>Postgres</strong> holds durable state — deployments, pipelines, autoscaling rules, users, quotas.</li>
+        <li><strong>Redis</strong> holds shared ephemeral state — rate limiting, sessions, and the provisioning queue.</li>
+        <li><strong>Next.js</strong> serves the dashboard and talks to the same public API a customer would use.</li>
+      </ul>
+      <div class="note-box">
+        Because the frontend consumes the same API surface as external clients, there is no
+        privileged back channel. If something is possible in the dashboard, it is possible
+        via the API.
+      </div>
+
+      <h2 id="provisioning">Asynchronous provisioning</h2>
+      <p>
+        Provisioning a GPU workload is slow — pulling images, scheduling onto a node, waiting
+        for readiness. Doing that inside a request handler means the caller blocks for tens of
+        seconds and any restart loses the work.
+      </p>
+      <p>
+        Instead, creating a deployment writes <code>status=provisioning</code> to Postgres, pushes
+        the deployment ID onto a queue, and returns immediately. A worker pool consumes the queue
+        and performs the slow work, updating status as it progresses.
+      </p>
+      <pre><code>POST /v1/deployments
+  → persist record (status: provisioning)
+  → enqueue deployment id
+  → 202 Accepted            (~milliseconds)
+
+worker
+  → claim job from stream
+  → build / pull image
+  → schedule onto accelerator
+  → health check
+  → status: running</code></pre>
+      <p>
+        The queue is backed by <strong>Redis Streams</strong> with consumer groups, so a job is
+        claimed by exactly one worker and survives a worker dying mid-flight. Workers drain
+        cleanly on <code>SIGTERM</code> rather than abandoning in-flight provisions.
+      </p>
+
+      <h2 id="scaling">Scaling and scale-to-zero</h2>
+      <p>
+        Autoscaling rules are stored per deployment with explicit minimum and maximum replica
+        counts. A minimum of <strong>zero</strong> is a first-class case, not an edge case: idle
+        deployments release their accelerators entirely.
+      </p>
+      <p>
+        This is the single biggest lever on cost. GPU capacity is expensive and most workloads
+        are bursty — an inference endpoint serving a demo, a notebook left open overnight, a
+        pipeline that runs twice a day. Reserved-capacity pricing punishes exactly those patterns.
+      </p>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Pattern</th><th>Reserved capacity</th><th>Scale-to-zero</th></tr></thead>
+        <tbody>
+          <tr><td>Demo endpoint, occasional traffic</td><td>Billed 24/7</td><td>Billed on request</td></tr>
+          <tr><td>Notebook left open</td><td>Billed 24/7</td><td>Released when idle</td></tr>
+          <tr><td>Scheduled batch job</td><td>Billed 24/7</td><td>Billed during the run</td></tr>
+          <tr><td>Steady production inference</td><td>Comparable</td><td>Comparable</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <h2 id="observability">Observability</h2>
+      <p>
+        The platform exposes a Prometheus-compatible <code>/metrics</code> endpoint covering
+        deployment counts by status, pipeline and autoscaling activity, and uptime. Per-GPU
+        utilisation comes from <strong>NVIDIA DCGM</strong>, federated in from the cluster.
+      </p>
+      <p>
+        The goal is that a user can answer two questions without leaving the platform:
+        <em>what is running right now</em>, and <em>what is it costing me</em>. Those turn out to
+        be the same question viewed from different ends.
+      </p>
+
+      <h2 id="metering">Metering</h2>
+      <p>
+        Usage is measured at the accelerator-second. Every state transition a workload makes is
+        recorded, and billing derives from those events rather than from a periodic poll — so a
+        workload that ran for ninety seconds is billed for ninety seconds.
+      </p>
+
+      <h2 id="decisions">Design decisions</h2>
+
+      <h3>Redis Streams rather than Kafka</h3>
+      <p>
+        Provisioning is low-volume — tens to hundreds of jobs, not millions of events. Redis
+        Streams gives durable consumer groups and at-least-once delivery while reusing
+        infrastructure already deployed for rate limiting and sessions. Kafka would add an
+        operational component earning nothing at this scale.
+      </p>
+      <p>
+        The queue sits behind an interface, so the broker can change without touching the
+        handlers. Kafka becomes justified for the high-volume metering firehose — per-GPU-second
+        events from many nodes, multiple independent consumers, replay — not for provisioning.
+      </p>
+
+      <h3>Stateless control plane</h3>
+      <p>
+        Every instance can serve every request. Scaling is adding instances; recovery is
+        replacing one. Shared state lives in Postgres and Redis where it can be reasoned about,
+        not in process memory where it disappears silently.
+      </p>
+
+      <h3>Standard formats throughout</h3>
+      <p>
+        Containers, standard model formats, an OpenAI-compatible inference surface. Portability
+        is a deliberate constraint: a platform that is hard to leave is one people hesitate to
+        adopt. Your images, weights and data stay exportable.
+      </p>
+
+      <div class="note-box" style="margin-top:44px">
+        ShaSentra is early-stage and under active development. This page describes the
+        architecture as built and as intended — it is an engineering overview, not a
+        product guarantee. Questions welcome:
+        <a href="mailto:shathish@shasentralabs.com">shathish@shasentralabs.com</a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 ShaSentra Labs. All rights reserved.</span>
+    <span><a href="/">Home</a> · <a href="mailto:shathish@shasentralabs.com">shathish@shasentralabs.com</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-toggle');
+  try{ var saved=localStorage.getItem('theme'); if(saved) root.setAttribute('data-theme',saved); }catch(e){}
+  function current(){
+    return root.getAttribute('data-theme') ||
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  }
+  if(btn){
+    btn.addEventListener('click', function(){
+      var next = current()==='dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try{ localStorage.setItem('theme', next); }catch(e){}
+      btn.textContent = next==='dark' ? '☾' : '☀';
+    });
+    btn.textContent = current()==='dark' ? '☾' : '☀';
+  }
+  var mb=document.getElementById('menu-btn'), mn=document.getElementById('mobile-nav');
+  if(mb && mn){
+    mb.addEventListener('click', function(){
+      var open = mn.classList.toggle('open');
+      mb.setAttribute('aria-expanded', open?'true':'false');
+      mb.textContent = open ? '✕' : '☰';
+    });
+  }
+})();
+</script>
+</body>
+</html>
