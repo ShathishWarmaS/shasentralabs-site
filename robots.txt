@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://shasentralabs.com/
+Sitemap: https://shasentralabs.com/sitemap.xml
