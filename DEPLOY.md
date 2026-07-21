@@ -40,10 +40,14 @@ Mail records — **do not touch**, these keep Zoho email working:
 
 ## Outstanding
 
-- [ ] **Enforce HTTPS** — GitHub rejected it (red ✗) on 2026-07-21 because the
-      `www` certificate had not been issued yet, shortly after the www CNAME was
-      changed. Retry at repo → Settings → Pages → tick "Enforce HTTPS".
-      Verify with: `curl -sI http://shasentralabs.com | head -1` — want `301`.
+- [x] **Enforce HTTPS** — DONE 2026-07-21. Cert `CN=shasentralabs.com` issued,
+      valid to 19 Oct 2026, auto-renews. HTTP now 301s to HTTPS.
+
+      **Gotcha for next time:** GitHub's cert request stalled for 2+ hours because
+      its first DNS check failed (the `www` CNAME initially pointed at the apex
+      instead of `shathishwarmas.github.io`). The automatic retry never fired.
+      Fix: Settings → Pages → Remove custom domain → re-enter it → Save. Cert
+      issued within a minute. Run `git pull` afterwards — GitHub rewrites CNAME.
 - [ ] `platform.shasentralabs.com` — no destination yet. Add a CNAME once the
       Next.js app is hosted somewhere that can run SSR (GitHub Pages cannot).
 
